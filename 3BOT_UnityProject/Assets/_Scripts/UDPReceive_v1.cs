@@ -74,27 +74,32 @@ public class UDPReceive_v1 : MonoBehaviour
 		player.transform.SetPositionAndRotation (roboPos, roboOrient);
 	}
 
-	//// OnGUI
-	//void OnGUI()
-	//{
-	//    Rect rectObj=new Rect(40,10,200,400);
-	//        GUIStyle style = new GUIStyle();
-	//            style.alignment = TextAnchor.UpperLeft;
-	//    GUI.Box(rectObj,"# UDPReceive\n127.0.0.1 "+port+" #\n"
-	//                + "shell> nc -u 127.0.0.1 : "+port+" \n"
-	//                + "\nLast Packet: \n"+ lastReceivedUDPPacket
-	//                + "\n\nAll Messages: \n"+allReceivedUDPPackets
-	//            ,style);
-	//}
-       
-	// init
-	private void init ()
+    private void OnApplicationQuit()
+    {
+        receiveThread.Abort();
+    }
+
+    //// OnGUI
+    //void OnGUI()
+    //{
+    //    Rect rectObj=new Rect(40,10,200,400);
+    //        GUIStyle style = new GUIStyle();
+    //            style.alignment = TextAnchor.UpperLeft;
+    //    GUI.Box(rectObj,"# UDPReceive\n127.0.0.1 "+port+" #\n"
+    //                + "shell> nc -u 127.0.0.1 : "+port+" \n"
+    //                + "\nLast Packet: \n"+ lastReceivedUDPPacket
+    //                + "\n\nAll Messages: \n"+allReceivedUDPPackets
+    //            ,style);
+    //}
+
+    // init
+    private void init ()
 	{
 		// Endpunkt definieren, von dem die Nachrichten gesendet werden.
 		print ("UDPSend.init()");
        
 		// define port
-		port = 8899;
+        port = 5005;
  
 		// status
 		print ("Sending to 127.0.0.1 : " + port);
@@ -121,12 +126,12 @@ public class UDPReceive_v1 : MonoBehaviour
 		client = new UdpClient (port);
 		while (true) {
  
-			try {
+			//try {
 				// Bytes empfangen.
 
 				IPEndPoint anyIPR = new IPEndPoint (IPAddress.Any, 0);
 				byte[] dataR = client.Receive (ref anyIPR);  
-				string textr = Encoding.UTF8.GetString (dataR);
+                string textr = Encoding.ASCII.GetString (dataR);
 
 				string[] recMsg = textr.Split(',');
 
@@ -134,13 +139,14 @@ public class UDPReceive_v1 : MonoBehaviour
 				eY = float.Parse (recMsg[1]);
 				eZ = float.Parse (recMsg[2]);
 
-				Debug.Log("Received udp message: " + eX.ToString()); 
+                //Debug.Log("In thread..."); 
+	            //Debug.Log("Received udp message: " + eX.ToString()); 
 
 				// cnter++;
 
-			} catch (Exception err) {
-				//print (err.ToString ());
-			}
+			//} catch (Exception err) {
+			//	//print (err.ToString ());
+			//}
 		}
 	}
    

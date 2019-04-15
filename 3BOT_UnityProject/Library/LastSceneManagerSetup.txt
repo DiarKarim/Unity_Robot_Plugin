@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/_Scene/3bot_unity_test_scene.unity
+  isLoaded: 1
+  isActive: 1
