@@ -12,6 +12,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3BOT-Demo_v2.cpp" />
+    <ClCompile Include="Unity_3BOT_Plugin.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Unity_3BOT_Plugin.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BAF35301-4CDF-454C-B131-FAEBFF1B1A37}</ProjectGuid>

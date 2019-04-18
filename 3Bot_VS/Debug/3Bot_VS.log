@@ -1,19 +1,18 @@
-﻿Build started 08/04/2019 13:41:19.
+﻿Build started 18/04/2019 17:35:20.
      1>Project "C:\3BOT\3Bot_VS\3Bot_VS\3Bot_VS.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\3BOT\3rd-party\OculusRift\ovr_sdk_win_0.4.2\OculusSDK\LibOVR\Lib\Win32\VS2013" /I"C:\3BOT\3rd-party\OculusRift\ovr_sdk_win_0.4.2\OculusSDK\LibOVR\Include" /IC:\3BOT\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D OS_WIN32 /D OVR_OS_WIN32 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "3BOT-Demo_v2.cpp"
          3BOT-Demo_v2.cpp
      1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xlocbuf(73): warning C4003: not enough actual parameters for macro 'assign'
      1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xlocbuf(140): warning C4003: not enough actual parameters for macro 'assign'
-     1>c:\3bot\3bot_vs\3bot_vs\3bot-demo_v2.cpp(107): warning C4101: 'si_other' : unreferenced local variable
-     1>c:\3bot\3bot_vs\3bot_vs\3bot-demo_v2.cpp(103): warning C4101: 'buf' : unreferenced local variable
-     1>c:\3bot\3bot_vs\3bot_vs\3bot-demo_v2.cpp(527): warning C4101: 'i' : unreferenced local variable
-     1>c:\3bot\3bot_vs\3bot_vs\3bot-demo_v2.cpp(557): warning C4101: 'buffer' : unreferenced local variable
+     1>c:\3bot\3bot_vs\3bot_vs\3bot-demo_v2.cpp(374): warning C4101: 'i' : unreferenced local variable
+     1>c:\3bot\3bot_vs\3bot_vs\3bot-demo_v2.cpp(404): warning C4101: 'buffer' : unreferenced local variable
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\3BOT\3Bot_VS\Debug\3Bot_VS.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\3BOT\oculus\GLEW\glew-1.11.0\lib\Release\Win32" /LIBPATH:"C:\3BOT\3rd-party\OculusRift\ovr_sdk_win_0.4.2\OculusSDK\LibOVR\Lib\Win32\VS2013" /LIBPATH:C:\3BOT\lib glut32.lib glu32.lib glew32.lib opengl32.lib oapi.lib winmm.lib nidaq32.lib nr.lib PDI.lib tk.lib libovrd.lib motor.lib Ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libc.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\3BOT\3Bot_VS\Debug\3Bot_VS.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\3BOT\3Bot_VS\Debug\3Bot_VS.lib" /MACHINE:X86 "Debug\3BOT-Demo_v2.obj"
+         Debug\Unity_3BOT_Plugin.obj
          3Bot_VS.vcxproj -> C:\3BOT\3Bot_VS\Debug\3Bot_VS.exe
      1>Done Building Project "C:\3BOT\3Bot_VS\3Bot_VS\3Bot_VS.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.12
+Time Elapsed 00:00:01.45

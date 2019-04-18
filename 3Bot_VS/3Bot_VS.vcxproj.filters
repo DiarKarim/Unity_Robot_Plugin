@@ -18,5 +18,13 @@
     <ClCompile Include="3BOT-Demo_v2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Unity_3BOT_Plugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Unity_3BOT_Plugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

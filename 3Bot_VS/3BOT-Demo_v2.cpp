@@ -22,32 +22,8 @@
 #define MODULE_NAME "3BOT-OculusMotor"
 
 /******************************************************************************/
-//#include<conio.h>
-#include <motor.h>
 
-#include <stdio.h>
-
-// UDP libs
-#include <sstream>
-
-#include <locale>         // std::wstring_convert
-#include <codecvt>        // std::codecvt_utf8
-
-#include<winsock2.h>
-#pragma comment(lib,"ws2_32.lib") // Winsock Library 
-#define BUFLEN 4
-#define PORT 8888
-
-// Client stuff
-#define SERVER "127.0.0.1"  //ip address of udp server
-#define BUFLENS 16 //Max length of buffer
-#define PORTS 8899   //The port on which to listen for incoming data
-
-// UDP libs end
-#include <thread> 
-#include <iostream>
-#include <string.h>
-#include <cstring>
+#include "Unity_3BOT_Plugin.h"
 
 #define REFRESH_INTERVAL  0.1   // sec
 
@@ -59,125 +35,7 @@
 
 using namespace std;
 
-class UDP_Sender
-{
-public:
-	// Client stuff start
-	struct sockaddr_in ssi_other;
-	int ss, sslen = sizeof(ssi_other);
-	char sbuf[BUFLENS];
-	char smessage[BUFLENS];
-	char smessageX[BUFLENS];
-	char smessageY[BUFLENS];
-	char smessageZ[BUFLENS];
-	WSADATA swsa;
-
-	UDP_Sender()
-	{
-		//Initialise winsock
-		printf("\nInitialising Winsock...");
-		if (WSAStartup(MAKEWORD(2, 2), &swsa) != 0)
-		{
-			printf("Failed. Error Code : %d", WSAGetLastError());
-			exit(EXIT_FAILURE);
-		}
-		printf("Initialised.\n");
-
-		//create socket
-		if ((ss = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == SOCKET_ERROR)
-		{
-			printf("socket() failed with error code : %d", WSAGetLastError());
-			exit(EXIT_FAILURE);
-		}
-
-		//setup address structure
-		memset((char *)&ssi_other, 0, sizeof(ssi_other));
-		ssi_other.sin_family = AF_INET;
-		ssi_other.sin_port = htons(PORTS);
-		ssi_other.sin_addr.S_un.S_addr = inet_addr(SERVER);
-
-		// Client stuff end
-
-		// UDP Stuff start
-		int slen;
-		char buf[BUFLEN];
-
-		SOCKET s;
-		WSADATA wsa;
-		struct sockaddr_in server, si_other;
-
-
-		//Initialise winsock
-		printf("\nInitialising Winsock...");
-		if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-		{
-			printf("Failed. Error Code : %d", WSAGetLastError());
-			exit(EXIT_FAILURE);
-		}
-		printf("Initialised.\n");
-
-		//Create a socket
-		if ((s = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET)
-		{
-			printf("Could not create socket : %d", WSAGetLastError());
-		}
-		printf("Socket created.\n");
-
-		//Prepare the sockaddr_in structure
-		server.sin_family = AF_INET;
-		server.sin_addr.s_addr = INADDR_ANY;
-		server.sin_port = htons(PORT);
-
-		//Bind
-		bind(s, (struct sockaddr *)&server, sizeof(server));
-		//if (bind(s, (struct sockaddr *)&server, sizeof(server)) == SOCKET_ERROR)
-		//{
-		//	printf("Bind failed with error code : %d", WSAGetLastError());
-		//	exit(EXIT_FAILURE);
-		//}
-		puts("Bind done");
-
-		slen = sizeof(si_other);
-
-		//receiveUDPmessage(s,wsa,slen,recv_len);
-
-		//// start threads
-		//std::thread udp1(receiveUDPmessage, s, wsa, slen, si_other, ptr);
-		//udp1.detach();
-
-		
-	}
-
-	void sendUDPmessage(string msg) // (char msg)
-	{
-		char bufsend[1024];
-		//char sendMsg[4] = { '1' };
-		//char sendMsg[sizeof bufsend] = { msg };
-		
-		string tmp = msg; 
-		char sendMsg[sizeof bufsend];
-		//strcpy(sendMsg, msg.c_str());
-		strncpy(sendMsg, tmp.c_str(), sizeof(sendMsg));
-
-		memcpy(&bufsend, sendMsg, sizeof bufsend);
-		printf("Sent: %s \n \r", bufsend);
-
-		int sentz = sendto(ss, bufsend, sizeof bufsend, 0, (struct sockaddr*) &ssi_other, sslen);
-		if (sendto(ss, bufsend, sizeof bufsend, 0, (struct sockaddr*) &ssi_other, sslen) == SOCKET_ERROR)
-		{
-			printf("sendto() failed with error code : %d", WSAGetLastError());
-			exit(EXIT_FAILURE);
-		}
-	}
-}; 
-
-//void receiveUDPmessage(SOCKET, WSADATA, int, struct sockaddr_in&, float*);
-//void sendUDPmessage(SOCKET, int, struct sockaddr_in&, double*);
-//std::string Convert(float);
-
 /******************************************************************************/
-
-
 
 TIMER_Interval  GraphicsDrawLatencyTimer("GraphicsDrawLatency");
 TIMER_Frequency GraphicsDrawFrequencyTimer("GraphicsDrawFrequency");
@@ -192,8 +50,8 @@ matrix RobotPositionRaw(3,1);          // cm
 matrix RobotPositionOffset(3,1);       // cm
 matrix RobotVelocity(3,1);             // cm/sec
 matrix RobotForces(3,1);               // N
-double RobotForceMax=15.0;             // N
-double RobotSpringConstant=-10.0;      // N/cm
+double RobotForceMax= 45.0;             // N
+double RobotSpringConstant= 35.0;      // N/cm
 
 TIMER_Frequency RobotLoopFrequencyTimer("RobotLoopFrequency");
 TIMER_Interval  RobotLoopLatencyTimer("RobotLoopLatency");
@@ -221,17 +79,6 @@ BOOL   SphereInsideFlag=FALSE;
 double CursorRadius = 2.0; // cm
 int    CursorColor = WHITE;
 double angles[3] = { 0.1, 0.1, 0.1 };
-
-
-// UDP Variables start  
-struct sockaddr_in ssi_other;
-int ss, sslen = sizeof(ssi_other);
-char sbuf[BUFLENS];
-char smessage[BUFLENS];
-char smessageX[BUFLENS];
-char smessageY[BUFLENS];
-char smessageZ[BUFLENS];
-WSADATA swsa;
 
 double* ptrX;
 double* ptrY; // = &RobotPosition(2, 1);
@@ -563,23 +410,6 @@ void RobotForcesFunction2(matrix &P, matrix &V, matrix &F)
 	string robotPositionMesg = buffX.str() + "," + buffY.str() + "," + buffZ.str();
 	udpSndr.sendUDPmessage(robotPositionMesg);
 
-	//int ret = snprintf(buffer, sizeof buffer, "%f", ptrX);
-	//int ret2 = snprintf(buffer, sizeof buffer, "%f", ptrY);
-	//int ret3 = snprintf(buffer, sizeof buffer, "%f", ptrZ);
-
-	//if (ret < 0) {
-	//	printf("err: Nothing in buffer!!! \n");
-	//}
-	//if (ret >= sizeof buffer) {
-	//	printf("Result was truncated - resize the buffer and retry \n");
-	//}
-	//
-	////printf("Robo pos string: %s	\n", buffer);
-
-	////printf("Robo pos: %f	\n", ptrX);
-	//udpSndr.sendUDPmessage(buffer);
-
-
 	// UDP Message send end *********************************************************
 
 	RobotForces.clampnorm(RobotForceMax);
@@ -737,21 +567,7 @@ void main(int argc, char *argv[])
 
 		cout << "Key pressed: -> " << key << "\"ascii value: " << asciiValue << endl; 
 
-		//if (asciiValue == 104) // H key pressed
-		//{
-		//	udpSndr.sendUDPmessage('1');
-		//}
-		//if (asciiValue == 106) // H key pressed
-		//{
-		//	udpSndr.sendUDPmessage('2');
-		//}
 	}
-
-
-
-
-
-
 
 	if (!Parameters(argc, argv))
 	{
@@ -794,81 +610,3 @@ void main(int argc, char *argv[])
 	GraphicsStart();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//void sendUDPmessage(SOCKET ss, int sslen, struct sockaddr_in& ssi_other, double* poS)
-//{
-//	char smessageZ[16];
-//	int ret1 = snprintf(smessageZ, sizeof smessageZ, "%f", &poS);
-//	if (sendto(ss, smessageZ, strlen(smessageZ), 0, (struct sockaddr *) &ssi_other, sslen) == SOCKET_ERROR)
-//	{
-//		printf("sendto() failed with error code : %d", WSAGetLastError());
-//		exit(EXIT_FAILURE);
-//	}
-//}
-//
-////float receiveUDPmessage(SOCKET sz, WSADATA wsaz, int slenz, struct sockaddr_in& si_otherz)
-//void receiveUDPmessage(SOCKET sz, WSADATA wsaz, int slenz, struct sockaddr_in& si_otherz, float* val)
-//{
-//	// UDP init start
-//	float afz;
-//	char bufz[4];
-//	int recv_len;
-//	//struct sockaddr_in si_other; 
-//
-//	while (true)
-//	{
-//		//printf("Waiting for data...");
-//		fflush(stdout);
-//
-//		//clear the buffer by filling null, it might have previously received data
-//		memset(bufz, '\0', BUFLEN);
-//
-//		//try to receive some data, this is a blocking call
-//		if ((recv_len = recvfrom(sz, bufz, BUFLEN, 0, (struct sockaddr *) &si_otherz, &slenz)) == SOCKET_ERROR)
-//		{
-//			printf("recvfrom() failed with error code : %d", WSAGetLastError());
-//			exit(EXIT_FAILURE);
-//		}
-//
-//		memcpy(&afz, bufz, sizeof afz);
-//		//printf("AF: %f \n", afz);
-//
-//		*val = afz;
-//		//printf("%f: \n", *val); // << std::endl;
-//
-//		//************************** Send *****************************
-//
-//		//char sendMsg[4] = { "78" };
-//		//char bufsend[4];
-//
-//		//memcpy(&bufsend, sendMsg, sizeof bufsend);
-//		//printf("%s: \r", bufsend);
-//
-//		////now reply the client with the same data
-//		//int sentz = sendto(sz, bufsend, recv_len, 0, (struct sockaddr*) &si_otherz, slenz);
-//		//if (sendto(sz, bufsend, recv_len, 0, (struct sockaddr*) &si_otherz, slenz) == SOCKET_ERROR)
-//		//{
-//		//	printf("sendto() failed with error code : %d", WSAGetLastError());
-//		//	exit(EXIT_FAILURE);
-//		//}
-//
-//	}
-//
-//	//return afz;
-//}
-//
-
-/******************************************************************************/
-
