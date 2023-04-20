@@ -2,6 +2,9 @@
  
     -----------------------
     UDP-Receiver
+    Author: Diar Karim
+    email: diarkarim@gmail.com
+    Date: 14th Aug 2018
     -----------------------
 This script receives position data from the 3Bot robotic manipulandum and passes it to a gameobject's positions. 
 
