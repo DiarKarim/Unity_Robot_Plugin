@@ -1,16 +1,11 @@
 ﻿/*
  
     -----------------------
-    UDP-Receive (send to)
+    UDP-Receiver
     -----------------------
-    // [url]http://msdn.microsoft.com/de-de/library/bb979228.aspx#ID0E3BAC[/url]
-   
-   
-    // > receive
-    // 127.0.0.1 : 8051
-   
-    // send
-    // nc -u 127.0.0.1 8051
+This script receives position data from the 3Bot robotic manipulandum and passes it to a gameobject's positions. 
+
+Next, add collision detection and sent it back to the robot for force control e.g. for creating a force channel to guide user's hands during target reaching movements.
  
 */
 using UnityEngine;
